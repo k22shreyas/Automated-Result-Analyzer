@@ -1,12 +1,18 @@
-
+from cgitb import text
 from distutils.log import error
+from lib2to3.pgen2 import driver
+from tkinter.tix import Tree
+from unicodedata import name
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 import time
 import os
 import pyautogui
 import cv2 as cv
 import pytesseract
+from lxml import html
+import requests
 
 # install all these as pip install filename, and pip install opencv-python.
 
@@ -27,24 +33,20 @@ def fillLoginpage():
 
     testbox = browser.find_element_by_xpath("/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
     captchabox = browser.find_element_by_xpath("/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
-    submitclick = browser.find_element_by_xpath("/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[3]/div[1]/input")
-
 
     #start with the image capta recognition procedure
     time.sleep(2)
-    myScreenshot = pyautogui.screenshot(region=(970,405, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
-    myScreenshot.save(r'D:\web_scrap\screenshot.png') #change according to your dir.
+    myScreenshot = pyautogui.screenshot(region=(970, 405, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
+    myScreenshot.save(r'D:\web_scrap\captcha\captcha_img.png') #change according to your dir.
 
     os.chdir('D:\web_scrap')
-    img = cv.imread('screenshot.png',0)
+    img = cv.imread('captcha\captcha_img.png',0)
     ret,thresh = cv.threshold(img,103,150,cv.THRESH_TOZERO_INV)
-    cv.imshow('Binary Threshold', thresh)
+    #cv.imshow('Binary Threshold', thresh)
     # Using cv2.imwrite() method
     # Saving the image
     os.chdir('D:\web_scrap\captcha')
     cv.imwrite("thresh_img.png", thresh)
-
-
 
     time.sleep(1)
     #os.system('"wsl tesseract thresh_img.jpg result"') #tesseract is ocr function for image to text
@@ -57,24 +59,33 @@ def fillLoginpage():
     
     captcha.replace(" ", "").strip()
 
-    print("Captcha printing" +captcha)
-    print(len(captcha))
+    print("Captcha printing " +captcha)
+    print(len(captcha)-1)
     if(len(captcha)-1 != 6 ):
         fillLoginpage()
 
     #finally input the result pages with required info.
     time.sleep(1)
     try:
-        testbox.send_keys("1AM18CS092")
+        testbox.send_keys("1AM18CS077")
+        captchabox.send_keys(captcha) 
     except:
         error
-    
-    captchabox.send_keys(captcha) 
-
     try:
         print(browser.current_url)
     except:
         fillLoginpage()
+    
+    #text = webdriver.find_element(By.XPATH,'//*[@id="dataPrint"]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]').text
+    #text = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[3]").text
+    text = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[5]").text
+    name = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]").text
+    #text = webdriver.find_element(By.XPATH,'//*[@id="raj"]/div[1]/div/label').text
+    #text = webdriver.find_element_by_xpath("//*[@id='dataPrint']/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]").text
+    print(name)
+    print(text)
+    #child_txt = driver.find_element_by_xpath("//div[@class='predictionsList']//div[@class='betWrapper ']//div[@class='betHeaderTitle']/span[@class='market']").text
+    
     time.sleep(100)
 
 fillLoginpage()
