@@ -76,17 +76,19 @@ def fillLoginpage():
     except:
         fillLoginpage()
     
-    #text = webdriver.find_element(By.XPATH,'//*[@id="dataPrint"]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]').text
-    #text = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[3]").text
-    text = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[5]").text
-    name = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]").text
-    #text = webdriver.find_element(By.XPATH,'//*[@id="raj"]/div[1]/div/label').text
-    #text = webdriver.find_element_by_xpath("//*[@id='dataPrint']/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]").text
-    print(name)
-    print(text)
-    #child_txt = driver.find_element_by_xpath("//div[@class='predictionsList']//div[@class='betWrapper ']//div[@class='betHeaderTitle']/span[@class='market']").text
+    #copy the full XPATH for the required cell and add the below code to get the data
+    subject_1 = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]").text
+    total_1 = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[5]").text
+
+    print(subject_1)
+    print(total_1)
     
     time.sleep(100)
 
 fillLoginpage()
 
+#text = webdriver.find_element(By.XPATH,'//*[@id="dataPrint"]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]').text
+#text = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[3]").text
+#text = webdriver.find_element(By.XPATH,'//*[@id="raj"]/div[1]/div/label').text
+#text = webdriver.find_element_by_xpath("//*[@id='dataPrint']/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]").text
+#child_txt = driver.find_element_by_xpath("//div[@class='predictionsList']//div[@class='betWrapper ']//div[@class='betHeaderTitle']/span[@class='market']").text
