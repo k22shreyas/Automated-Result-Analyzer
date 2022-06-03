@@ -60,7 +60,7 @@ def fillLoginpage():
     captcha.replace(" ", "").strip()
 
     print("Captcha printing " +captcha)
-    print(len(captcha)-1)
+    #print(len(captcha)-1)
     if(len(captcha)-1 != 6 ):
         fillLoginpage()
 
@@ -77,18 +77,17 @@ def fillLoginpage():
         fillLoginpage()
     
     #copy the full XPATH for the required cell and add the below code to get the data
-    subject_1 = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]").text
-    total_1 = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[5]").text
-
-    print(subject_1)
-    print(total_1)
+    #subject_1 = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[3]/div[2]").text
+    #total_1 = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'18CS71')]//following::div[4]").text
+    types = ['1','2','3','4']
+    sub_codes = ["18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
+    
+    for sub_code in sub_codes:
+        print("Subject")
+        for type in types:
+            subject_1 = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div["+type+"]").text
+            print(subject_1)
     
     time.sleep(100)
 
 fillLoginpage()
-
-#text = webdriver.find_element(By.XPATH,'//*[@id="dataPrint"]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]').text
-#text = browser.find_element_by_xpath("/html/body/div[2]/div[2]/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[3]").text
-#text = webdriver.find_element(By.XPATH,'//*[@id="raj"]/div[1]/div/label').text
-#text = webdriver.find_element_by_xpath("//*[@id='dataPrint']/div[2]/div/div/div[2]/div[1]/div/div/div[2]/div/div/div[2]/div/div[2]/div[5]").text
-#child_txt = driver.find_element_by_xpath("//div[@class='predictionsList']//div[@class='betWrapper ']//div[@class='betHeaderTitle']/span[@class='market']").text
