@@ -107,10 +107,6 @@ def fillLoginpage(usn, ite):
     wb.save("vtu_result.xlsx")
 
     time.sleep(2)
-    
-    ite = ite+1
-    cell_obj = sheet.cell(row=ite, column=1)
-    usn = cell_obj.value
     return ite;
 
 
@@ -120,12 +116,19 @@ sheet=wb.active                                                                 
 #store and pass current usn to function
 def main():
     ite=3
+    print("START")
     while ite <= sheet.max_column:
         cell_obj = sheet.cell(row=ite, column=1)
         usn = cell_obj.value
         x = fillLoginpage(usn, ite)
-        if(x == -1):
-            fillLoginpage(usn, ite)
+        print("IN MAIN FUNC") #for testing
+        print(ite) #for testing
+        if(x == ite):
+            print(x)
+        elif(x == -1):
+            print(x)
+            continue
+        ite = ite+1
 
 
 if __name__ == "__main__":
