@@ -1,26 +1,16 @@
-from cgitb import text
-from distutils.log import error
-from lib2to3.pgen2 import driver
-from logging import exception
-from textwrap import fill
-from tkinter.tix import Tree
-from unicodedata import name
 from openpyxl import load_workbook
 from selenium import webdriver
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-import openpyxl
 import time
+import csv
 import os
 import pyautogui
 import pandas as pd
 import cv2 as cv
 import pytesseract
-
-
 # install all these as pip install filename, and pip install opencv-python.
   
-
 option = webdriver.ChromeOptions()
 option.add_argument("-incognito")
 option.add_argument("start-maximized")
@@ -29,7 +19,6 @@ option.add_experimental_option("detach",True)
 
 #add your chrome driver installation path
 browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=option)
-
 
 def fillLoginpage(usn, ite):
 
@@ -50,7 +39,6 @@ def fillLoginpage(usn, ite):
     ret,thresh = cv.threshold(img,103,150,cv.THRESH_TOZERO_INV)
     #cv.imshow('Binary Threshold', thresh)
     # Using cv2.imwrite() method
-    # Saving the image
     os.chdir('D:\web_scrap\captcha')
     cv.imwrite("thresh_img.png", thresh)
 
@@ -65,14 +53,11 @@ def fillLoginpage(usn, ite):
     
     captcha.replace(" ", "").strip()
 
-    print("Captcha printing " +captcha)
-    #print(len(captcha)-1)
+    print("Printing solved Captcha " +captcha)
+    #Exception and Error handling
     if(len(captcha)-1 != 6 ):
         return -1
-
-    #finally input the result pages with required info.
     time.sleep(1)
-
     try:
         testbox.send_keys(usn)
         captchabox.send_keys(captcha) 
@@ -84,33 +69,41 @@ def fillLoginpage(usn, ite):
         return -1
     
     time.sleep(2)
-    sub_codes = ["18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
-    rows = []
 
-    for sub_code in sub_codes:
-        subject = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[1]").text
-        internal_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[2]").text
-        external_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[3]").text
-        total_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").text
-        remarks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[5]").text
+    #sub_codes = ["18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
+    name_loop = 0
+    marks_list = []
+    marks_list.append(usn)
+    sub_codes = []
+    for subs in range(3,sheet.max_column):
+        subject = sheet.cell(row=1,column=subs)
+        sub_codes.append(subject)
 
-        present_row_data={'Subject Code': sub_code,
-                   'Subject Name': subject,
-                   'Internal Marks': internal_marks,
-                   'External Marks': external_marks,
-                   'Total': total_marks,
-                   'Remarks': remarks }
-        rows.append(present_row_data)
+    try:
+        for sub_code in sub_codes:
+            name = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").text
+            internal_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[2]").int
+            external_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[3]").int
+            total_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").int
+
+            if(name_loop == 0):
+                marks_list.append(name)
+            name_loop += 1
+            marks_list.append(internal_marks)
+            marks_list.append(external_marks)
+            marks_list.append(total_marks)
+
+    except:
+        return 1
+        #Error handling
     
-    final_result_data = pd.DataFrame(rows)                              #import pandas as pd
-    final_result_data.to_excel(r'vtu_result.xlsx',index=False)
-    wb.save("vtu_result.xlsx")
+    #fields = ["USN", "18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
+    with open('D:\web_scrap\\result\marks.csv', 'a') as f:
+    # using csv.writer method from CSV package
+        write = csv.writer(f)
+        write.writerow(marks_list)
 
-    time.sleep(2)
-    return ite;
-
-
-filepath=r"D:\web_scrap\score\student_marks_list.xlsx"    #excel path
+filepath=r"D:\web_scrap\result\student_marks_list.xlsx"    #excel path
 wb=load_workbook(filepath)                                                         # load into wb
 sheet=wb.active                                                                    # active workbook
 #store and pass current usn to function
@@ -123,10 +116,13 @@ def main():
         x = fillLoginpage(usn, ite)
         print("IN MAIN FUNC") #for testing
         print(ite) #for testing
-        if(x == ite):
+        if(x == 1):
             print(x)
+            ite = ite+1
+            continue
         elif(x == -1):
-            print(x)
+            print("IN ekif block")
+            print(ite)
             continue
         ite = ite+1
 
