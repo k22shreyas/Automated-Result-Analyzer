@@ -70,38 +70,40 @@ def fillLoginpage(usn, ite):
     
     time.sleep(2)
 
-    #sub_codes = ["18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
-    name_loop = 0
+    sub_codes = ["18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
+
     marks_list = []
     marks_list.append(usn)
+    print(marks_list)
+    """
     sub_codes = []
+    
     for subs in range(3,sheet.max_column):
         subject = sheet.cell(row=1,column=subs)
         sub_codes.append(subject)
-
+    """
     try:
         for sub_code in sub_codes:
-            name = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").text
-            internal_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[2]").int
-            external_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[3]").int
-            total_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").int
+            #name = browser.find_element_by_xpath("//*[@id='dataPrint']/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div/table/tbody/tr[2]/td[2]/text()").text
+            internal_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[2]").text
+            external_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[3]").text
+            total_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").text
 
-            if(name_loop == 0):
-                marks_list.append(name)
-            name_loop += 1
             marks_list.append(internal_marks)
             marks_list.append(external_marks)
             marks_list.append(total_marks)
-
+            print(marks_list)
     except:
         return 1
         #Error handling
-    
+    print(marks_list)
+    os.chdir('D:\web_scrap\captcha')
     #fields = ["USN", "18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
-    with open('D:\web_scrap\\result\marks.csv', 'a') as f:
+    with open('mark.csv', 'a') as f:
     # using csv.writer method from CSV package
         write = csv.writer(f)
         write.writerow(marks_list)
+    time.sleep(2)
 
 filepath=r"D:\web_scrap\result\student_marks_list.xlsx"    #excel path
 wb=load_workbook(filepath)                                                         # load into wb
