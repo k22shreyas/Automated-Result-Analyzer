@@ -10,7 +10,11 @@ import pandas as pd
 import cv2 as cv
 import pytesseract
 # install all these as pip install filename, and pip install opencv-python.
-  
+
+f = open("mark.csv", "w")
+f.truncate()
+f.close()
+
 option = webdriver.ChromeOptions()
 option.add_argument("-incognito")
 option.add_argument("start-maximized")
@@ -37,7 +41,7 @@ def fillLoginpage(usn, ite):
     os.chdir('D:\web_scrap')
     img = cv.imread('captcha\captcha_img.png',0)
     ret,thresh = cv.threshold(img,103,150,cv.THRESH_TOZERO_INV)
-    #cv.imshow('Binary Threshold', thresh)
+    cv.imshow('Binary Threshold', thresh)
     # Using cv2.imwrite() method
     os.chdir('D:\web_scrap\captcha')
     cv.imwrite("thresh_img.png", thresh)
@@ -67,52 +71,56 @@ def fillLoginpage(usn, ite):
         print(browser.current_url)
     except:
         return -1
-    
     time.sleep(2)
-
-    sub_codes = ["18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
 
     marks_list = []
     marks_list.append(usn)
-    print(marks_list)
-    """
-    sub_codes = []
+    subject_codes = []
     
-    for subs in range(3,sheet.max_column):
-        subject = sheet.cell(row=1,column=subs)
-        sub_codes.append(subject)
-    """
+    for cols in range(3, sheet.max_column+1):
+        cell_subject = sheet.cell(row=1,column=cols)
+        subject = cell_subject.value
+        subject_codes.append(subject)
+    print(subject_codes)
+    
     try:
-        for sub_code in sub_codes:
+        for sub_code in subject_codes:
             #name = browser.find_element_by_xpath("//*[@id='dataPrint']/div[2]/div/div/div[2]/div[1]/div/div/div[1]/div/table/tbody/tr[2]/td[2]/text()").text
             internal_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[2]").text
             external_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[3]").text
             total_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[4]").text
+            remarks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+sub_code+"')]//following::div[5]").text
 
             marks_list.append(internal_marks)
             marks_list.append(external_marks)
             marks_list.append(total_marks)
+            marks_list.append(remarks)
             print(marks_list)
     except:
         return 1
         #Error handling
     print(marks_list)
-    os.chdir('D:\web_scrap\captcha')
+    os.chdir('D:\web_scrap\\result')
     #fields = ["USN", "18ME751", "18CS71", "18CS72","18CS744","18CS734","18CSL76","18CSP77"]
-    with open('mark.csv', 'a') as f:
+    with open('marks.csv', 'a') as f:
     # using csv.writer method from CSV package
         write = csv.writer(f)
         write.writerow(marks_list)
     time.sleep(2)
 
-filepath=r"D:\web_scrap\result\student_marks_list.xlsx"    #excel path
+    csv_read = pd.read_csv('marks.csv')
+    csv2excel = pd.ExcelWriter('student_marks.xlsx')
+    csv_read.to_excel(csv2excel, index=True, header=False)
+    csv2excel.save()
+
+filepath=r"D:\web_scrap\result\student_usn_subject.xlsx"    #excel path
 wb=load_workbook(filepath)                                                         # load into wb
 sheet=wb.active                                                                    # active workbook
 #store and pass current usn to function
 def main():
     ite=3
     print("START")
-    while ite <= sheet.max_column:
+    while ite <= sheet.max_row:
         cell_obj = sheet.cell(row=ite, column=1)
         usn = cell_obj.value
         x = fillLoginpage(usn, ite)
