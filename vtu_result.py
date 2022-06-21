@@ -1,15 +1,18 @@
-from selenium import webdriver
-from selenium.common.exceptions import NoAlertPresentException
-from selenium.common.exceptions import NoSuchElementException
-import time
-import csv
 import os
+import csv
+import time
 import pyautogui
-import pandas as pd
 import cv2 as cv
 import pytesseract
+import pandas as pd
+from matplotlib import pyplot
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoAlertPresentException
+from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import WebDriverException
 
-f = open("D:\web_scrap\\result\marks.csv", "w")
+f = open("D:\web_scrap\\input\marks.csv", "w")
 f.truncate()
 f.close()
 
@@ -22,10 +25,13 @@ browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver
 browser.set_window_size(600, 800)
 def fillLoginpage(usn, subject_codes):
 
-    browser.get("https://results.vtu.ac.in/FMEcbcs22/index.php")
-
-    testbox = browser.find_element_by_xpath("/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
-    captchabox = browser.find_element_by_xpath("/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
+    try:
+        browser.get("https://results.vtu.ac.in/FMEcbcs22/index.php")
+    except WebDriverException:
+        print("Error loading VTU result page")
+    
+    textbox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
+    captchabox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
 
     time.sleep(1)
     myScreenshot = pyautogui.screenshot(region=(45, 415, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
@@ -52,7 +58,7 @@ def fillLoginpage(usn, subject_codes):
     time.sleep(1)
 
     try:
-        testbox.send_keys(usn)
+        textbox.send_keys(usn)
         captchabox.send_keys(captcha) 
     except:
         return -1
@@ -60,7 +66,7 @@ def fillLoginpage(usn, subject_codes):
     try:
         obj = browser.switch_to.alert
         msg=obj.text
-        obj.accept()
+        obj.accept() #will click on ok
         print(msg)
         if(msg == "Invalid captcha code !!!"):
             return -1
@@ -74,10 +80,10 @@ def fillLoginpage(usn, subject_codes):
         try:
             sub_code = 0
             while sub_code < len(subject_codes):
-                internal_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[2]").text
-                external_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[3]").text
-                total_marks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[4]").text
-                remarks = browser.find_element_by_xpath("//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[5]").text
+                internal_marks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[2]").text
+                external_marks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[3]").text
+                total_marks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[4]").text
+                remarks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[5]").text
 
                 marks_list.append(internal_marks)
                 marks_list.append(external_marks)
@@ -87,21 +93,21 @@ def fillLoginpage(usn, subject_codes):
         
         except NoSuchElementException:
             print("Invalid (USN, Subject Code) combination")
-            with open('D:\web_scrap\\result\marks.csv', 'a',) as f:
+            with open('D:\web_scrap\\input\marks.csv', 'a',) as f:
                 write = csv.writer(f)
                 marks_list.append("NA")
                 write.writerow(marks_list)
-            csv_read = pd.read_csv('D:\web_scrap\\result\marks.csv')
+            csv_read = pd.read_csv('D:\web_scrap\\input\marks.csv')
             csv2excel = pd.ExcelWriter('D:\web_scrap\\result\student_marks.xlsx')
             csv_read.to_excel(csv2excel)
             csv2excel.save()
             return 1 
         
         print(marks_list)
-        with open('D:\web_scrap\\result\marks.csv', 'a') as f:
+        with open('D:\web_scrap\\input\marks.csv', 'a') as f:
             write = csv.writer(f)
             write.writerow(marks_list)
-        csv_read = pd.read_csv('D:\web_scrap\\result\marks.csv')
+        csv_read = pd.read_csv('D:\web_scrap\\input\marks.csv')
         csv2excel = pd.ExcelWriter('D:\web_scrap\\result\student_marks.xlsx')
         csv_read.to_excel(csv2excel)
         csv2excel.save()
@@ -109,14 +115,14 @@ def fillLoginpage(usn, subject_codes):
 def main():
     ite=0
     student_usn = []
-    file = open('D:\web_scrap\\result\student_usn.csv')
+    file = open('D:\web_scrap\\input\student_usn.csv')
     csvreader = csv.reader(file)
     for usns in csvreader:
         student_usn.append(usns[0])
-    
+
     headerList = ['USN']
     subject_codes = []
-    file = open('D:\web_scrap\\result\codes.csv')
+    file = open('D:\web_scrap\\input\codes.csv')
     csvreader = csv.reader(file)
     for row in csvreader:
         subject_codes.append(row[0])
@@ -126,7 +132,7 @@ def main():
         headerList.append('Remarks')
     print(subject_codes)
 
-    with open('D:\web_scrap\\result\marks.csv', 'a') as file:
+    with open('D:\web_scrap\\input\marks.csv', 'a') as file:
         dw = csv.DictWriter(file, delimiter=',', fieldnames=headerList)
         dw.writeheader()
 
