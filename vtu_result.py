@@ -1,4 +1,5 @@
 import os
+import re
 import csv
 import time
 import pyautogui
@@ -29,9 +30,11 @@ def fillLoginpage(usn, subject_codes):
         browser.get("https://results.vtu.ac.in/FMEcbcs22/index.php")
     except WebDriverException:
         print("Error loading VTU result page")
+        quit()
     
     textbox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
     captchabox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
+    button = browser.find_element(by=By.XPATH, value="//*[@id='submit']")
 
     time.sleep(1)
     myScreenshot = pyautogui.screenshot(region=(45, 415, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
@@ -48,18 +51,19 @@ def fillLoginpage(usn, subject_codes):
     #install tesseract from https://github.com/UB-Mannheim/tesseract/wiki choose 64-bit 
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
     custom_config = r'--oem 3 --psm 6'
-    captcha = pytesseract.image_to_string(img2, config=custom_config)
-    captcha.replace(" ", "").strip()
-
+    pre_captcha = pytesseract.image_to_string(img2, config=custom_config)
+    pre_captcha.replace(" ", "").strip()
+    captcha = re.sub('[^A-Za-z0-9]+', '', pre_captcha)
     print("Printing solved Captcha " +captcha)
 
-    if(len(captcha)-1 != 6 ):
+    if(len(captcha) != 6 ):
         return -1
     time.sleep(1)
 
     try:
         textbox.send_keys(usn)
         captchabox.send_keys(captcha) 
+        button.click()
     except:
         return -1
 
