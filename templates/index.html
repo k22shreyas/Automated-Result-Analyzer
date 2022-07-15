@@ -68,7 +68,11 @@
 
     <div class="d3">
         <div class="d3d1">
-          <p>Start the execution here - <button type="button" name="execute">Start</button> </p>
+          <p>Start the execution here - 
+            <form action="/run" method = "post">
+                <button type="submit" value="run">{{downloadAlert}}</button>
+            </form>
+          </p>
         </div>
     </div>
 

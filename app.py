@@ -1,5 +1,7 @@
 from flask import *  
 import os
+import subprocess
+import sys
 app = Flask(__name__)  
  
 @app.route('/') 
@@ -32,7 +34,12 @@ def codesFile():
         except WindowsError:
             os.remove('codes.csv')
             os.rename(f.filename, 'codes.csv')
-        return render_template("index.html", downloadAlert='Download Results Now') 
+        return render_template("index.html", downloadAlert='Wait for extraction to complete') 
+
+@app.route('/run', methods = ['POST'])
+def run_script():
+    py_filepath = 'D:\web_scrap\\vtu_result.py'
+    os.system(f'py {py_filepath}')
 
 @app.route('/download',methods = ['GET'])
 def plot_csv():
@@ -45,6 +52,7 @@ def plot_csv():
         )
     except WindowsError:
         return render_template("index.html", downloadAlert='Results not found')  
+
 
 
 if __name__ == '__main__':  
