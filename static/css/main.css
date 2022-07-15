@@ -1,0 +1,194 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body{
+    font-family:sans-serif;
+  }
+  a {
+   text-decoration: none;
+  }
+  li {
+   list-style: none;
+  }
+  
+  /*nav bar*/
+  .navbar {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   padding: 20px;
+   background-color: teal;
+   color: #fff;
+  }
+  .nav-links a {
+   color: #fff;
+  }
+  .logo {
+   font-size: 32px;
+  }
+  .menu {
+   display: flex;
+   gap: 1em;
+   font-size: 18px;
+  }
+  .menu li:hover {
+   background-color: #4c9e9e;
+   border-radius: 5px;
+   transition: 0.3s ease;
+  }
+  .menu li {
+   padding: 5px 14px;
+  }
+  .menu li a{
+    color: white;
+  }
+  .menu li a:hover{
+    color: white;
+  }
+  
+  /* Welcome message*/
+  .d1{
+    padding:40px 20px;
+    align-items: center;
+    background-color: #b3e0dc;
+  }
+  .d1 p{
+    color: teal;
+    text-align: center;
+    font-size: 25px;
+    text-shadow: 1px 1px black;
+    font-weight: bold;
+  }
+  
+  
+  
+  /* csv files upload divs*/
+  .d2{
+    display: flex;
+    flex-wrap: wrap;
+    padding:20px 10px;
+    background-color: teal;
+  }
+  .d2d1{
+    flex: 50%;
+    max-width: 50%;
+  }
+  .d2d2{
+    flex: 50%;
+    max-width: 50%;
+  }
+  .d2d1d1{
+    background-color: #4c9e9e;
+    padding: 50px 10px;
+    margin: 40px;
+    border-radius: 10px;
+  }
+  .d2d2d2{
+    background-color: #4c9e9e;
+    padding: 50px 10px;
+    margin: 40px;
+    border-radius: 10px;
+  }
+  .d2d1d1 p{
+    text-align: center;
+    font-size: 30px;
+    color: white;
+  }
+  .d2d2d2 p{
+    text-align: center;
+    font-size: 30px;
+    color: white;
+  }
+  
+  
+  /*execution button*/
+  .d3{
+    display: flex;
+    flex-wrap: wrap;
+    padding:20px 10px;
+    background-color: #b3e0dc;
+  }
+  .d3d1{
+    flex: 100%;
+    max-width: 100%;
+    background-color: #4c9e9e;
+    padding: 50px 10px;
+    margin: 20px 400px 0;
+    border-radius: 10px;
+  }
+  .d3d1 p{
+    color: white;
+    text-align: center;
+    font-size: 20px;
+  }
+  .d3d1 p button{
+    padding: 10px 30px;
+    border-width: 5px;
+    background-color: #02b6b9;
+    border-color: white;
+    color: white;
+    font-size: 15px;
+  }
+  .d3d1 p button:hover {
+   background-color: #b3e0dc;
+   border-radius: 5px;
+   transition: 0.3s ease;
+   cursor: pointer;
+   color: black;
+   border-color: white;
+  }
+  
+  
+  
+  
+  /*download button*/
+  .d4{
+    display: flex;
+    flex-wrap: wrap;
+    padding:20px 10px;
+    background-color: #b3e0dc;
+  }
+  .d4d1{
+    flex: 100%;
+    max-width: 100%;
+    background-color: #4c9e9e;
+    padding: 50px 10px;
+    margin: 0px 400px 20px;
+    border-radius: 10px;
+  }
+  .d4d1 p{
+    color: white;
+    text-align: center;
+    font-size: 20px;
+  }
+  .d4d1 p button{
+    padding: 10px 30px;
+    border-width: 5px;
+    background-color: #02b6b9;
+    border-color: white;
+    color: white;
+    font-size: 15px;
+  }
+  .d4d1 p button:hover {
+   background-color: #b3e0dc;
+   border-radius: 5px;
+   transition: 0.3s ease;
+   cursor: pointer;
+   color: black;
+   border-color: white;
+  }
+  
+  /* footer */
+  .d5{
+    width: 100%;
+    background-color: teal;
+    padding: 30px 10px;
+  }
+  .d5 p{
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px #02b6b9;
+    font-size: 15px;
+  }

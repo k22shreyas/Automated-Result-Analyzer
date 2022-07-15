@@ -13,7 +13,7 @@ from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 
-f = open("D:\web_scrap\\input\marks.csv", "w")
+f = open("D:\web_scrap\\result\marks.csv", "w")
 f.truncate()
 f.close()
 
@@ -24,10 +24,10 @@ option.add_experimental_option("detach",True)
 
 browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=option)
 browser.set_window_size(600, 800)
-def fillLoginpage(usn, subject_codes):
+def fillLoginpage(usn, subject_codes, result_link):
 
     try:
-        browser.get("https://results.vtu.ac.in/FMEcbcs22/index.php")
+        browser.get(result_link)
     except WebDriverException:
         print("Error loading VTU result page")
         quit()
@@ -36,7 +36,7 @@ def fillLoginpage(usn, subject_codes):
     captchabox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
     button = browser.find_element(by=By.XPATH, value="//*[@id='submit']")
 
-    time.sleep(1)
+    #time.sleep(1)
     myScreenshot = pyautogui.screenshot(region=(45, 415, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
     myScreenshot.save(r'D:\web_scrap\captcha\captcha_img.png') #change according to your dir.
 
@@ -46,7 +46,7 @@ def fillLoginpage(usn, subject_codes):
     os.chdir('D:\web_scrap\captcha')
     cv.imwrite("threshold_img.png", thresh)
 
-    time.sleep(1)
+    #time.sleep(1)
     img2 = cv.imread('threshold_img.png',0)
     #install tesseract from https://github.com/UB-Mannheim/tesseract/wiki choose 64-bit 
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
@@ -58,7 +58,7 @@ def fillLoginpage(usn, subject_codes):
 
     if(len(captcha) != 6 ):
         return -1
-    time.sleep(1)
+    #time.sleep(1)
 
     try:
         textbox.send_keys(usn)
@@ -97,27 +97,32 @@ def fillLoginpage(usn, subject_codes):
         
         except NoSuchElementException:
             print("Invalid (USN, Subject Code) combination")
-            with open('D:\web_scrap\\input\marks.csv', 'a',) as f:
+            with open('D:\web_scrap\\result\marks.csv', 'a',) as f:
                 write = csv.writer(f)
                 marks_list.append("NA")
                 write.writerow(marks_list)
-            csv_read = pd.read_csv('D:\web_scrap\\input\marks.csv')
+            csv_read = pd.read_csv('D:\web_scrap\\result\marks.csv')
             csv2excel = pd.ExcelWriter('D:\web_scrap\\result\student_marks.xlsx')
             csv_read.to_excel(csv2excel)
             csv2excel.save()
             return 1 
         
         print(marks_list)
-        with open('D:\web_scrap\\input\marks.csv', 'a') as f:
+        with open('D:\web_scrap\\result\marks.csv', 'a') as f:
             write = csv.writer(f)
             write.writerow(marks_list)
-        csv_read = pd.read_csv('D:\web_scrap\\input\marks.csv')
+        csv_read = pd.read_csv('D:\web_scrap\\result\marks.csv')
         csv2excel = pd.ExcelWriter('D:\web_scrap\\result\student_marks.xlsx')
         csv_read.to_excel(csv2excel)
         csv2excel.save()
 
 def main():
     ite=0
+    resultLinkfile = open("D:\web_scrap\input\link.txt", "r")
+    result_link = resultLinkfile.readline()
+    print(result_link)
+    resultLinkfile.close()
+
     student_usn = []
     file = open('D:\web_scrap\\input\student_usn.csv')
     csvreader = csv.reader(file)
@@ -136,7 +141,7 @@ def main():
         headerList.append('Remarks')
     print(subject_codes)
 
-    with open('D:\web_scrap\\input\marks.csv', 'a') as file:
+    with open('D:\web_scrap\\result\marks.csv', 'a') as file:
         dw = csv.DictWriter(file, delimiter=',', fieldnames=headerList)
         dw.writeheader()
 
@@ -144,7 +149,7 @@ def main():
     while ite < len(student_usn):
         usn = student_usn[ite]
         print(usn)
-        x = fillLoginpage(usn, subject_codes)
+        x = fillLoginpage(usn, subject_codes, result_link)
         if(x == 1):
             #Iterate with next usn as error handling
             ite = ite+1
