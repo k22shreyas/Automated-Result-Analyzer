@@ -1,7 +1,6 @@
 import os
 import re
 import csv
-import time
 import pyautogui
 import cv2 as cv
 import pytesseract
@@ -23,14 +22,19 @@ option.add_experimental_option("excludeSwitches", ['enable-automation'])
 option.add_experimental_option("detach",True)
 
 browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=option)
+browser.minimize_window()  
 browser.set_window_size(600, 800)
+browser.switch_to.window(browser.current_window_handle)
+
+def check_success(err_code):
+    print(err_code)
+
 def fillLoginpage(usn, subject_codes, result_link):
 
     try:
         browser.get(result_link)
-    except WebDriverException:
-        print("Error loading VTU result page")
-        quit()
+    except:
+        return 404;
     
     textbox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
     captchabox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
@@ -54,7 +58,7 @@ def fillLoginpage(usn, subject_codes, result_link):
     pre_captcha = pytesseract.image_to_string(img2, config=custom_config)
     pre_captcha.replace(" ", "").strip()
     captcha = re.sub('[^A-Za-z0-9]+', '', pre_captcha)
-    print("Printing solved Captcha " +captcha)
+    #print("Printing solved Captcha " +captcha)
 
     if(len(captcha) != 6 ):
         return -1
@@ -71,7 +75,7 @@ def fillLoginpage(usn, subject_codes, result_link):
         obj = browser.switch_to.alert
         msg=obj.text
         obj.accept() #will click on ok
-        print(msg)
+        #print(msg)
         if(msg == "Invalid captcha code !!!"):
             return -1
         if(msg == "University Seat Number is not available or Invalid..!"):
@@ -96,7 +100,7 @@ def fillLoginpage(usn, subject_codes, result_link):
                 sub_code +=1
         
         except NoSuchElementException:
-            print("Invalid (USN, Subject Code) combination")
+            #print("Invalid (USN, Subject Code) combination")
             with open('D:\web_scrap\\result\marks.csv', 'a',) as f:
                 write = csv.writer(f)
                 marks_list.append("NA")
@@ -107,7 +111,7 @@ def fillLoginpage(usn, subject_codes, result_link):
             csv2excel.save()
             return 1 
         
-        print(marks_list)
+        #print(marks_list)
         with open('D:\web_scrap\\result\marks.csv', 'a') as f:
             write = csv.writer(f)
             write.writerow(marks_list)
@@ -120,7 +124,7 @@ def main():
     ite=0
     resultLinkfile = open("D:\web_scrap\input\link.txt", "r")
     result_link = resultLinkfile.readline()
-    print(result_link)
+    #print(result_link)
     resultLinkfile.close()
 
     student_usn = []
@@ -139,26 +143,25 @@ def main():
         headerList.append('Externals')
         headerList.append('Total')
         headerList.append('Remarks')
-    print(subject_codes)
+    #print(subject_codes)
 
     with open('D:\web_scrap\\result\marks.csv', 'a') as file:
         dw = csv.DictWriter(file, delimiter=',', fieldnames=headerList)
         dw.writeheader()
 
-    print("START")
-    while ite < len(student_usn):
+    while ite < 1:
         usn = student_usn[ite]
-        print(usn)
+        #print(usn)
         x = fillLoginpage(usn, subject_codes, result_link)
         if(x == 1):
-            #Iterate with next usn as error handling
             ite = ite+1
             continue
         elif(x == -1):
-            #iterate with same usn
             continue
-        #Iterate with next usn
+        elif(x == 404):
+            check_success(x)
         ite = ite+1
+    check_success(1)
 
 if __name__ == "__main__":
     main()

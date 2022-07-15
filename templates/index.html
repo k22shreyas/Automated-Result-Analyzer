@@ -1,23 +1,3 @@
-<!--
-<html>  
-<head>  
-    <title>upload</title>  
-</head>  
-<body>  
-    <form action = "/upload_usns" method = "post" enctype="multipart/form-data">  
-        <input type="file" name="file" />  
-        <input type = "submit" value="Upload">  
-    </form>  
-    <form action = "/upload_codes" method = "post" enctype="multipart/form-data">  
-        <input type="file" name="file" />  
-        <input type = "submit" value="Upload">  
-    </form>  
-    <form action="/download" method = "get" enctype = "multiple/form-data">
-        <button type="submit" value="download">Download</button>
-    </form>
-</body>  
-</html>  
--->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -26,16 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <title>VTU Result Analysis</title>
-  </head>
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
+    </head>
 
-  <body>
+    <body>
 
     <nav class="navbar">
-      <div class="logo">VTU Result Analysis</div>
-      <ul class="menu">
-        <li> <a href="/" target="_self">Home</a> </li>
-        <li> <a href="" target="_self">About</a> </li>
-      </ul>
+        <div class="logo">VTU RESULT ANALYSIS</div>
+        <ul class="menu">
+            <li> <a href="/" target="_self">Home</a> </li>
+            <li> <a href="" target="_self">About</a> </li>
+        </ul>
     </nav>
 
     <div class="d1">
@@ -43,46 +24,51 @@
     </div>
 
     <div class="d2">
-      <div class="d2d1">
-          <div class="d2d1d1">
-            <p>Upload student usn csv file -
-                <form action = "/upload_usns" method = "post" enctype="multipart/form-data">  
-                    <input type="file" name="file" />  
-                    <input type = "submit" value="Upload">  
-                    <p>{{name}}</p> 
+        <div class="d2d1">
+            <div class="d2d1d1">
+            <p>Upload student usn csv file
+                <form class="cen" action = "/upload_usns" method = "post" enctype="multipart/form-data">
+                    <input class="btn-grad" type="file" name="file" />
+                    <input class="btn-grad" type="submit" value="Upload">
                 </form>
             </p>
-          </div>
-      </div>
-      <div class="d2d2">
-          <div class="d2d2d2">
-            <p>Upload subject code csv file -
-                <form action = "/upload_codes" method = "post" enctype="multipart/form-data">  
-                    <input type="file" name="file" />  
-                    <input type = "submit" value="Upload">  
-                </form> 
+            </div>
+        </div>
+        <div class="d2d2">
+            <div class="d2d2d2">
+            <p>Upload subject code csv file
+                <form class="cen" action = "/upload_codes" method = "post" enctype="multipart/form-data">
+                    <input class="btn-grad" type="file" name="file" />
+                    <input class="btn-grad" type = "submit" value="Upload">
+                </form>
             </p>
-          </div>
-      </div>
+            </div>
+        </div>
     </div>
-
+    <div class="dxdz">
+        <div class = "dydxdz">
+            <p>
+                {{logs}}
+            </p>
+        </div>
+    </div>
     <div class="d3">
         <div class="d3d1">
-          <p>Start the execution here - 
-            <form action="/run" method = "post">
-                <button type="submit" value="run">{{downloadAlert}}</button>
+            <p>Start the execution here
+            <form class="cen" action="/run" method = "post">
+                <button class="btn-grad" type="submit" value="run">Execute</button>
             </form>
-          </p>
+            </p>
         </div>
     </div>
 
     <div class="d4">
         <div class="d4d1">
-          <p>Download your marks file here -
-            <form action="/download" method = "get" enctype = "multiple/form-data">
-                <button type="submit" name="download" value="download">{{downloadAlert}}</button>
+            <p>Download your marks file here
+            <form class="cen" action="/download" method = "get" enctype = "multiple/form-data">
+                <button class="btn-grad" type="submit" name="download" value="download">download file</button>
             </form>
-        </p>
+            </p>
         </div>
     </div>
 
@@ -90,6 +76,6 @@
         <p>A novel approach for analyzing Results on vtu university portal ©copyright 2022</p>
     </div>
 
-  </body>
+    </body>
 
 </html>
