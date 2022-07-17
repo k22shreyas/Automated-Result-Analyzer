@@ -1,46 +1,36 @@
 import os
 import re
 import csv
+import sys
+import time
 import pyautogui
 import cv2 as cv
 import pytesseract
 import pandas as pd
-from matplotlib import pyplot
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
-
-f = open("D:\web_scrap\\result\marks.csv", "w")
-f.truncate()
-f.close()
-
-option = webdriver.ChromeOptions()
-option.add_argument("-incognito")
-option.add_experimental_option("excludeSwitches", ['enable-automation'])
-option.add_experimental_option("detach",True)
-
-browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=option)
-browser.minimize_window()  
-browser.set_window_size(600, 800)
-browser.switch_to.window(browser.current_window_handle)
-
-def check_success(err_code):
-    print(err_code)
+from selenium.common.exceptions import NoSuchWindowException
 
 def fillLoginpage(usn, subject_codes, result_link):
-
+    
     try:
         browser.get(result_link)
     except:
-        return 404;
-    
-    textbox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
-    captchabox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
-    button = browser.find_element(by=By.XPATH, value="//*[@id='submit']")
+        time.sleep(1)
+        print('siteDown')
+        quit()
 
-    #time.sleep(1)
+    try:
+        textbox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[1]/div/input")
+        captchabox = browser.find_element(by=By.XPATH, value="/html/body/div[2]/div[1]/div[2]/div/div[2]/form/div/div[2]/div[2]/div[1]/input")
+        button = browser.find_element(by=By.XPATH, value="//*[@id='submit']")
+    except NoSuchWindowException:
+        print('noWindow')
+        quit()
+
     myScreenshot = pyautogui.screenshot(region=(45, 415, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
     myScreenshot.save(r'D:\web_scrap\captcha\captcha_img.png') #change according to your dir.
 
@@ -50,7 +40,6 @@ def fillLoginpage(usn, subject_codes, result_link):
     os.chdir('D:\web_scrap\captcha')
     cv.imwrite("threshold_img.png", thresh)
 
-    #time.sleep(1)
     img2 = cv.imread('threshold_img.png',0)
     #install tesseract from https://github.com/UB-Mannheim/tesseract/wiki choose 64-bit 
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe' 
@@ -81,10 +70,8 @@ def fillLoginpage(usn, subject_codes, result_link):
         if(msg == "University Seat Number is not available or Invalid..!"):
             return 1
     except NoAlertPresentException: 
-
         marks_list = []
         marks_list.append(usn)
-        
         try:
             sub_code = 0
             while sub_code < len(subject_codes):
@@ -110,7 +97,7 @@ def fillLoginpage(usn, subject_codes, result_link):
             csv_read.to_excel(csv2excel)
             csv2excel.save()
             return 1 
-        
+     
         #print(marks_list)
         with open('D:\web_scrap\\result\marks.csv', 'a') as f:
             write = csv.writer(f)
@@ -120,7 +107,16 @@ def fillLoginpage(usn, subject_codes, result_link):
         csv_read.to_excel(csv2excel)
         csv2excel.save()
 
+    except WebDriverException:
+        print('noDriver')
+        quit()
+
 def main():
+
+    f = open("D:\web_scrap\\result\marks.csv", "w")
+    f.truncate()
+    f.close()
+
     ite=0
     resultLinkfile = open("D:\web_scrap\input\link.txt", "r")
     result_link = resultLinkfile.readline()
@@ -149,7 +145,7 @@ def main():
         dw = csv.DictWriter(file, delimiter=',', fieldnames=headerList)
         dw.writeheader()
 
-    while ite < 1:
+    while ite < len(student_usn):
         usn = student_usn[ite]
         #print(usn)
         x = fillLoginpage(usn, subject_codes, result_link)
@@ -158,10 +154,19 @@ def main():
             continue
         elif(x == -1):
             continue
-        elif(x == 404):
-            check_success(x)
         ite = ite+1
-    check_success(1)
+    print('extractComplete')
 
 if __name__ == "__main__":
+    
+    option = webdriver.ChromeOptions()
+    option.add_argument("-incognito")
+    option.add_experimental_option("excludeSwitches", ['enable-automation'])
+    option.add_experimental_option("detach",True)
+    
+    browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=option)
+    browser.minimize_window()  
+    browser.set_window_size(600, 800)
+    browser.switch_to.window(browser.current_window_handle)
+    
     main()
