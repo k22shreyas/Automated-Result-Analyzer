@@ -7,75 +7,123 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <title>VTU Result Analysis</title>
     <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
-    </head>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Play&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,700,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  </head>
 
-    <body>
+  <body>
+    <section id="extraction" class="sec3">
+    <section id="navi" class="sec1">
+        <nav class="navbar">
+            <div class="logo">VTU RESULT ANALYSIS</div>
+            <ul class="menu">
+                <li> <a href="/" target="_self">Home</a> </li>
+                <li> <a href="#extraction">Extraction</a> </li>
+                <li> <a href="#about">About</a> </li>
+            </ul>
+        </nav>
+    </section>
 
-    <nav class="navbar">
-        <div class="logo">VTU RESULT ANALYSIS</div>
-        <ul class="menu">
-            <li> <a href="/" target="_self">Home</a> </li>
-            <li> <a href="" target="_self">About</a> </li>
-        </ul>
-    </nav>
-
-    <div class="d1">
-        <p>WELCOME TO THE RESULT EXTRACTION SITE</p>
-    </div>
-
-    <div class="d2">
-        <div class="d2d1">
-            <div class="d2d1d1">
-            <p>Upload student usn csv file
-                <form class="cen" action = "/upload_usns" method = "post" enctype="multipart/form-data">
-                    <input class="btn-grad" type="file" name="file" />
-                    <input class="btn-grad" type="submit" value="Upload">
-                </form>
-            </p>
+            <div class="s3d1">
+                <p>WELCOME TO THE RESULT EXTRACTION SITE</p>
             </div>
-        </div>
-        <div class="d2d2">
-            <div class="d2d2d2">
-            <p>Upload subject code csv file
-                <form class="cen" action = "/upload_codes" method = "post" enctype="multipart/form-data">
+
+            <div class="s3d2">
+                <div class="s3d2d1">
+                  <div class="s3d2d1d1">
+                    <p>Upload student usn csv file
+                        <form class="cen" action = "/upload_usns" method = "post" enctype="multipart/form-data">
+                            <input class="btn-grad" type="file" name="file" />
+                            <input class="btn-grad" type="submit" value="Upload">
+                        </form>
+                    </p>
+                  </div>
+                </div>
+                <div class="s3d2d2">
+                    <div class="s3d2d2d2">
+                      <p>Upload subject code csv file
+                          <form class="cen" action = "/upload_codes" method = "post" enctype="multipart/form-data">
+                              <input class="btn-grad" type="file" name="file" />
+                              <input class="btn-grad" type = "submit" value="Upload">
+                          </form>
+                      </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="s3d6">
+                <div class = "s3d6d1">
+                    <p>
+                        Status: {{logs}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="s3d3">
+                <div class="s3d3d1">
+                  <p>Start the execution here
+                    <form class="cen" action="/run" method = "post">
+                        <button class="btn-grad" type="submit" value="run">Execute</button>
+                    </form>
+                  </p>
+                </div>
+            </div>
+
+
+            <div class="s3d4">
+                <div class="s3d4d1">
+                  <p>Download your marks file here
+                    <form class="cen" action="/download" method = "get" enctype = "multiple/form-data">
+                        <button class="btn-grad" type="submit" name="download" value="download">download excel file</button>
+                    </form>
+                    <form class="cen" action="/download_csv" method = "get" enctype = "multiple/form-data">
+                      <button class="btn-grad" type="submit" name="download" value="download">download csv file</button>
+                  </form>
+                  </p>
+                </div>
+            </div>
+
+            <div class="s3d3">
+              <div class="s3d3d1">
+                <p>Upload results link txt file
+                  <form class="cen" action = "/upload_link" method = "post" enctype="multipart/form-data">
                     <input class="btn-grad" type="file" name="file" />
                     <input class="btn-grad" type = "submit" value="Upload">
                 </form>
-            </p>
+                </p>
+              </div>
+          </div>
+
+            <div class="s3d7 cen">
+              <a href="#about"><span class="material-symbols-outlined">expand_circle_down</span><br>ABOUT</a>
+            </div>
+    </section>
+
+    <section id="about" class="sec2">
+        <div class="s2d2 cen">
+          <a href="#extraction" >EXTRACTION <br><span class="material-symbols-outlined">arrow_circle_up</span> </a>
+        </div>
+
+        <div class="s2d1">
+            <div class="s2d1d1">
+              <h1>A Novel approach to analyze results on vtu university portal</h1>
+              <p>This is a site made for extracting results from the vtu result portal.<br> The csv files of student usn and subject codes are to be uploaded.<br>
+                      Click the execute button which initiates our automation code.<br> The respective usn's and subject codes are utilized in the extraction process.<br>
+                      Finally after the extraction processs is complete, download the final files provided by clicking download.</p><br>
+              <p>This project is made by <b style="color:orange;">Harshath H R, K Rajat, K Shreyas</b> and <b style="color:orange;">Lipika B</b> as a final year project, <br>belonging to department of computer science engineering, 8th semester, AMC Engineering college. </p>
             </div>
         </div>
-    </div>
-    <div class="dxdz">
-        <div class = "dydxdz">
-            <p>
-                {{logs}}
-            </p>
-        </div>
-    </div>
-    <div class="d3">
-        <div class="d3d1">
-            <p>Start the execution here
-            <form class="cen" action="/run" method = "post">
-                <button class="btn-grad" type="submit" value="run">Execute</button>
-            </form>
-            </p>
-        </div>
-    </div>
+    </section>
 
-    <div class="d4">
-        <div class="d4d1">
-            <p>Download your marks file here
-            <form class="cen" action="/download" method = "get" enctype = "multiple/form-data">
-                <button class="btn-grad" type="submit" name="download" value="download">download file</button>
-            </form>
-            </p>
-        </div>
-    </div>
 
-    <div class="d5">
-        <p>A novel approach for analyzing Results on vtu university portal ©copyright 2022</p>
-    </div>
+    <section class="sec4">
+            <div class="s4d1">
+                <p>A novel approach for analyzing Results on vtu university portal ©copyright 2022</p>
+            </div>
+    </section>
 
-    </body>
+  </body>
 
 </html>
+

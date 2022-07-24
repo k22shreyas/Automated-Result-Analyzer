@@ -3,9 +3,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  scroll-behavior: smooth;
+}
 body{
   font-family: 'Cardo', serif;
-  background-color: #023047 ;
+  background: #0B172A ;
 }
 a {
  text-decoration: none;
@@ -17,27 +20,36 @@ li {
 
 
 
+/*--------------------- section 1 ----------------------*/
+.sec1{
+  height: 80px;
+}
+
 /*nav bar*/
 .navbar {
  display: flex;
  align-items: center;
  justify-content: space-between;
  padding: 20px;
-
 }
 .nav-links a {
  color: #40E1F9;
 }
 .logo {
- font-size: 20px;
- color: orange;
- font-weight: bolder;
-
+ font-size: 30px;
+ color: white;
+ font-family: 'Bebas Neue', cursive;
+ font-style: italic;
+ border:3px solid orange;
+ border-left:100px solid transparent;
+ border-right:100px solid transparent;
 }
 .menu {
  display: flex;
  gap: 1em;
  font-size: 18px;
+ float: right;
+
 }
 .menu li:hover {
  background-color: white;
@@ -46,68 +58,122 @@ li {
 }
 .menu li {
  padding: 5px 14px;
+ text-align:right;
 }
 .menu li a{
+  font-family: 'Bebas Neue', cursive;
   color: orange;
   font-size: 20px;
+  letter-spacing: 3px;
 }
 .menu li a:hover{
   color: black;
 }
 
+
+/*------------------------- section 2 -----------------------*/
+.sec2{
+  height: 900px;
+}
+.s2d1{
+  padding:20px 10px;
+  height: 750px;
+}
+.s2d1d1 h1{
+  font-family: 'Bebas Neue', cursive;
+  font-size: 70px;
+  color: orange;
+  margin: 150px 10% 0;
+}
+.s2d1d1 p{
+  font-family: 'Play', sans-serif;
+  font-size: 25px;
+  color: white;
+  margin: 10px 10% 0;
+  line-height:25px;
+}
+.s2d2{
+  margin: 25px ;
+}
+.s2d2 a{
+  color:orange;
+  font-size: 25px;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 3px;
+}
+.material-symbols-outlined {
+  color: orange;
+}
+
+
+
+
+/*-------------------------- section 3 -----------------------*/
 /* Welcome message*/
-.d1{
+.s3d1{
   padding:40px 20px;
   align-items: center;
 }
-.d1 p{
-  color: white;
+.s3d7{
+  margin: 40px 25px 25px ;
+  padding-top: 15px;
+}
+.s3d7 a{
+  color:orange;
+  font-size: 25px;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 3px;
+}
+.s3d1 p{
+  color: orange;
   text-align: center;
-  font-size: 30px;
-  font-weight: bold;
-  text-shadow: 1px 1px orange;
+  font-size: 50px;
+  font-family: 'Bebas Neue', cursive;
+  letter-spacing: 3px;
 }
 
 
 
 /* csv files upload divs*/
-.d2{
+.s3d2{
   display: flex;
   flex-wrap: wrap;
   padding:20px 10px;
 }
-.d2d1{
+.s3d2d1{
   flex: 50%;
   max-width: 50%;
   background-color: orange;
 }
-.d2d2{
+.s3d2d2{
   flex: 50%;
   max-width: 50%;
   background-color: orange;
 }
-.d2d1d1{
+.s3d2d1d1{
   padding: 20px 10px;
   margin: 5px;
   border-radius: 10px;
-  background-color: white;
+  background:linear-gradient(to right,#0b0b45,#02055A,#02055A,#02055A,#0b0b45) ;
 }
-.d2d2d2{
+.s3d2d2d2{
   padding: 20px 10px;
   margin: 5px;
   border-radius: 10px;
-  background-color: white;
+  background:linear-gradient(to right,#0b0b45,#02055A,#02055A,#02055A,#0b0b45) ;
 }
-.d2d1d1 p{
+.s3d2d1d1 p{
   text-align: center;
   font-size: 30px;
+  font-family: 'Play', sans-serif;
   color: orange;
   font-weight: bold;
   text-shadow: 1px 1px black;
 }
-.d2d2d2 p{
+.s3d2d2d2 p{
   text-align: center;
   font-size: 30px;
+  font-family: 'Play', sans-serif;
   color: orange;
   font-weight: bold;
   text-shadow: 1px 1px black;
@@ -117,64 +183,69 @@ li {
 
 
 /*execution button*/
-.d3{
+.s3d3{
   display: flex;
   flex-wrap: wrap;
   padding:20px 10px;
 
 }
-.d3d1{
+.s3d3d1{
   flex: 100%;
   max-width: 100%;
   padding: 10px 10px;
-  margin: 20px 400px 0;
+  margin: 30px 400px 0;
   border-radius: 10px;
-  background-color: white;
+  background:linear-gradient(to right,#0b0b45,#02055A,#02055A,#02055A,#0b0b45) ;
   border: 5px solid orange;
 }
-.d3d1 p{
+.s3d3d1 p{
   color: orange;
   text-align: center;
+  font-family: 'Play', sans-serif;
   font-size: 30px;
   font-weight: bold;
   text-shadow: 1px 1px black;
 }
 
-.dxdz{
+.s3d6{
   flex: 100%;
   max-width: 100%;
   padding: 5px 5px;
-  margin: 20px 400px 0;
-  border-radius: 10px;
-  background-color: white;
-  border: 5px solid orange;
+  margin: 20px 50px 0;
+  border:3px solid orange;
+  border-left:100px solid transparent;
+  border-right:100px solid transparent;
 }
-.dydxdz p{
+.s3d6d1 p{
   text-align: center;
   font-size: 30px;
+  font-family: 'Play', sans-serif;
   color: orange;
   font-weight: bold;
   text-shadow: 1px 1px black;
 }
 
+
+
 /*download button*/
-.d4{
+.s3d4{
   display: flex;
   flex-wrap: wrap;
   padding:20px 10px;
 }
-.d4d1{
+.s3d4d1{
   flex: 100%;
   max-width: 100%;
   padding: 5px;
-  margin: 0px 400px 0;
+  margin: 10px 400px 0;
   border-radius: 10px;
-  background-color: white;
+  background:linear-gradient(to right,#0b0b45,#02055A,#02055A,#02055A,#0b0b45) ;
   border: 5px solid orange;
 }
-.d4d1 p{
+.s3d4d1 p{
   color: orange;
   text-align: center;
+  font-family: 'Play', sans-serif;
   font-size: 30px;
   font-weight: bold;
   text-shadow: 1px 1px black;
@@ -182,18 +253,21 @@ li {
 
 
 
-
+/*------------------------ section 4 -----------------------*/
 /* footer */
-.d5{
+.s4d1{
   width: 100%;
   padding: 30px 10px;
 }
-.d5 p{
+.s4d1 p{
   text-align: center;
+  font-family: 'Play', sans-serif;
   color: white;
   text-shadow: 0.5px 0.5px orange;
   font-size: 15px;
 }
+
+/*-------------------------- extras ------------------------*/
 
 
 /* button gradient*/
@@ -207,14 +281,16 @@ li {
    background-size: 200% auto;
    color: black;
    border: 5px outset lightgrey ;
-
-
+   font-family: 'Play', sans-serif;
+   font-weight: bold;
+   font-size: 15px;
  }
 
  .btn-grad:hover {
-   background-position: right center; /* change the direction of the change here */
+   background-position: right center;
    color: black;
    text-decoration: none;
+   font-weight: bold;
    cursor: pointer;
  }
 

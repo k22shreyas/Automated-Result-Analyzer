@@ -19,7 +19,6 @@ def fillLoginpage(usn, subject_codes, result_link):
     try:
         browser.get(result_link)
     except:
-        time.sleep(1)
         print('siteDown')
         quit()
 
@@ -63,8 +62,7 @@ def fillLoginpage(usn, subject_codes, result_link):
     try:
         obj = browser.switch_to.alert
         msg=obj.text
-        obj.accept() #will click on ok
-        #print(msg)
+        obj.accept()
         if(msg == "Invalid captcha code !!!"):
             return -1
         if(msg == "University Seat Number is not available or Invalid..!"):
@@ -72,9 +70,9 @@ def fillLoginpage(usn, subject_codes, result_link):
     except NoAlertPresentException: 
         marks_list = []
         marks_list.append(usn)
-        try:
-            sub_code = 0
-            while sub_code < len(subject_codes):
+        sub_code = 0
+        while sub_code < len(subject_codes):
+            try:
                 internal_marks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[2]").text
                 external_marks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[3]").text
                 total_marks = browser.find_element(by=By.XPATH, value="//*[@id='dataPrint']//*[contains(text(),'"+subject_codes[sub_code]+"')]//following::div[4]").text
@@ -85,19 +83,14 @@ def fillLoginpage(usn, subject_codes, result_link):
                 marks_list.append(total_marks)
                 marks_list.append(remarks)
                 sub_code +=1
-        
-        except NoSuchElementException:
-            #print("Invalid (USN, Subject Code) combination")
-            with open('D:\web_scrap\\result\marks.csv', 'a',) as f:
-                write = csv.writer(f)
-                marks_list.append("NA")
-                write.writerow(marks_list)
-            csv_read = pd.read_csv('D:\web_scrap\\result\marks.csv')
-            csv2excel = pd.ExcelWriter('D:\web_scrap\\result\student_marks.xlsx')
-            csv_read.to_excel(csv2excel)
-            csv2excel.save()
-            return 1 
-     
+    
+            except NoSuchElementException:
+                marks_list.append(0)
+                marks_list.append(0)
+                marks_list.append(0)
+                marks_list.append(0)
+                sub_code +=1 
+    
         #print(marks_list)
         with open('D:\web_scrap\\result\marks.csv', 'a') as f:
             write = csv.writer(f)
@@ -118,28 +111,37 @@ def main():
     f.close()
 
     ite=0
-    resultLinkfile = open("D:\web_scrap\input\link.txt", "r")
+    resultLinkfile = open("D:\web_scrap\input\link.txt")
     result_link = resultLinkfile.readline()
     #print(result_link)
     resultLinkfile.close()
-
+    
     student_usn = []
-    file = open('D:\web_scrap\\input\student_usn.csv')
-    csvreader = csv.reader(file)
-    for usns in csvreader:
-        student_usn.append(usns[0])
-
+    try:
+        file = open('D:\web_scrap\\input\student_usn.csv')
+        csvreader = csv.reader(file)
+        for usns in csvreader:
+            student_usn.append(usns[0])
+        file.close()
+    except FileNotFoundError:
+        print("fileNotFound")
+        quit()
+    
     headerList = ['USN']
     subject_codes = []
-    file = open('D:\web_scrap\\input\codes.csv')
-    csvreader = csv.reader(file)
-    for row in csvreader:
-        subject_codes.append(row[0])
-        headerList.append('Internals')
-        headerList.append('Externals')
-        headerList.append('Total')
-        headerList.append('Remarks')
-    #print(subject_codes)
+    try:
+        file = open('D:\web_scrap\\input\codes.csv')
+        csvreader = csv.reader(file)
+        for row in csvreader:
+            subject_codes.append(row[0])
+            headerList.append('Internals')
+            headerList.append('Externals')
+            headerList.append('Total')
+            headerList.append('Remarks')
+        file.close()
+    except FileNotFoundError:
+        print("fileNotFound")
+        quit()
 
     with open('D:\web_scrap\\result\marks.csv', 'a') as file:
         dw = csv.DictWriter(file, delimiter=',', fieldnames=headerList)
