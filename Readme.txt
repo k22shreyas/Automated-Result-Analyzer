@@ -1,3 +1,5 @@
+RUN app.py TO START THE SERVER THEN OPEN THE SHOWN HOST URL TO GET USER INTERFACE
+
 Make sure applications are installed in the specified locations...
 
 1. Download and install python 3.10.0 from
