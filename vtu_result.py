@@ -9,10 +9,13 @@ import pytesseract
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import NoAlertPresentException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import WebDriverException
 from selenium.common.exceptions import NoSuchWindowException
+from selenium.common.exceptions import SessionNotCreatedException
+from selenium.common.exceptions import *
 
 def fillLoginpage(usn, subject_codes, result_link):
     
@@ -166,9 +169,12 @@ if __name__ == "__main__":
     option.add_experimental_option("excludeSwitches", ['enable-automation'])
     option.add_experimental_option("detach",True)
     
-    browser = webdriver.Chrome(executable_path=r'C:\Program Files (x86)\chromedriver.exe', options=option)
-    browser.minimize_window()  
-    browser.set_window_size(600, 800)
-    browser.switch_to.window(browser.current_window_handle)
-    
+    try:
+        driverPath = Service('D:\\web_scrap\installers\chromedriver.exe')
+        browser = webdriver.Chrome(service = driverPath)
+        browser.minimize_window()  
+        browser.set_window_size(600, 800)
+        browser.switch_to.window(browser.current_window_handle)
+    except SessionNotCreatedException:
+        print('Chrome driver error')
     main()
