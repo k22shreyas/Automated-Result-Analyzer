@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)  
 def restart():
-    os.chdir('D:\web_scrap')
     os.system("python app.py")
 
 @app.route('/') 
@@ -15,7 +14,7 @@ def upload():
 def usnsFile():  
     if request.method == 'POST':  
         f = request.files['file']  
-        os.chdir('D:\web_scrap\input')
+        os.chdir('..\input')
         f.save(f.filename)
 
         try:
@@ -28,8 +27,9 @@ def usnsFile():
 @app.route('/upload_codes', methods = ['POST'])  
 def codesFile():  
     if request.method == 'POST':  
-        f = request.files['file']  
-        os.chdir('D:\web_scrap\input')
+        f = request.files['file']
+        os.chdir('..')
+        os.chdir('..\input')
         f.save(f.filename)
 
         try:
@@ -43,7 +43,8 @@ def codesFile():
 def linkFile():  
     if request.method == 'POST':  
         f = request.files['file']  
-        os.chdir('D:\web_scrap\input')
+        os.chdir('..')
+        os.chdir('..\input')
         f.save(f.filename)
 
         try:
@@ -56,7 +57,7 @@ def linkFile():
 @app.route('/run', methods = ['POST'])
 def run_script():
     try:
-        os.chdir('D:\web_scrap')
+        os.chdir('..')
         p = subprocess.Popen(['python','vtu_result.py'], stdout=subprocess.PIPE, bufsize=1)
 
         for line in iter(p.stdout.readline, b''):
