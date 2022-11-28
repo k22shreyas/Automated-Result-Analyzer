@@ -34,12 +34,11 @@ def fillLoginpage(usn, subject_codes, result_link):
         quit()
 
     myScreenshot = pyautogui.screenshot(region=(45, 415, 170, 80)) #region=(horizontal pos, vertical pos, vertical ratio, horizontal ratio)
-    myScreenshot.save(r'D:\web_scrap\captcha\captcha_img.png') #change according to your dir.
+    myScreenshot.save(r'\captcha\captcha_img.png') #change according to your dir.
 
-    os.chdir('D:\web_scrap')
     img = cv.imread('captcha\captcha_img.png',0)
     ret,thresh = cv.threshold(img,103,150,cv.THRESH_TOZERO_INV)
-    os.chdir('D:\web_scrap\captcha')
+    os.chdir('\captcha')
     cv.imwrite("threshold_img.png", thresh)
 
     img2 = cv.imread('threshold_img.png',0)
@@ -95,11 +94,11 @@ def fillLoginpage(usn, subject_codes, result_link):
                 sub_code +=1 
     
         #print(marks_list)
-        with open('D:\web_scrap\\result\marks.csv', 'a') as f:
+        with open('\result\marks.csv', 'a') as f:
             write = csv.writer(f)
             write.writerow(marks_list)
-        csv_read = pd.read_csv('D:\web_scrap\\result\marks.csv')
-        csv2excel = pd.ExcelWriter('D:\web_scrap\\result\student_marks.xlsx')
+        csv_read = pd.read_csv('\result\marks.csv')
+        csv2excel = pd.ExcelWriter('\result\student_marks.xlsx')
         csv_read.to_excel(csv2excel)
         csv2excel.save()
 
@@ -109,19 +108,20 @@ def fillLoginpage(usn, subject_codes, result_link):
 
 def main():
 
-    f = open("D:\web_scrap\\result\marks.csv", "w")
+    os.chdir('D:\web_scrap')
+    f = open("\result\marks.csv", "w")
     f.truncate()
     f.close()
 
     ite=0
-    resultLinkfile = open("D:\web_scrap\input\link.txt")
+    resultLinkfile = open("\input\link.txt")
     result_link = resultLinkfile.readline()
     #print(result_link)
     resultLinkfile.close()
     
     student_usn = []
     try:
-        file = open('D:\web_scrap\\input\student_usn.csv')
+        file = open('\input\student_usn.csv')
         csvreader = csv.reader(file)
         for usns in csvreader:
             student_usn.append(usns[0])
@@ -133,7 +133,7 @@ def main():
     headerList = ['USN']
     subject_codes = []
     try:
-        file = open('D:\web_scrap\\input\codes.csv')
+        file = open('\input\codes.csv')
         csvreader = csv.reader(file)
         for row in csvreader:
             subject_codes.append(row[0])
@@ -146,7 +146,7 @@ def main():
         print("fileNotFound")
         quit()
 
-    with open('D:\web_scrap\\result\marks.csv', 'a') as file:
+    with open('\result\marks.csv', 'a') as file:
         dw = csv.DictWriter(file, delimiter=',', fieldnames=headerList)
         dw.writeheader()
 
@@ -170,7 +170,7 @@ if __name__ == "__main__":
     option.add_experimental_option("detach",True)
     
     try:
-        driverPath = Service('D:\\web_scrap\installers\chromedriver.exe')
+        driverPath = Service('\installers\chromedriver.exe')
         browser = webdriver.Chrome(service = driverPath)
         browser.minimize_window()  
         browser.set_window_size(600, 800)
