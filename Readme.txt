@@ -13,7 +13,7 @@ start->edit system environment variable->environment variables->select and edit 
 Link -> https://chromedriver.chromium.org/downloads
 Copy chromedriver.exe to the installer directory.
 
-										OR
+					OR
 
 Installe Chrome version102 present in the installer directory and 
 leave the chromedriver version102 which is already in the directory as it is.
@@ -22,7 +22,7 @@ leave the chromedriver version102 which is already in the directory as it is.
 3. Tesseract OCR: Install the setup present in the directory and set path as specfied below.
 C:\Program Files\Tesseract-OCR\
 
-										OR
+					OR
 
 Download and install newer version of tesseract {choose 64-bit} from 
 Link -> https://github.com/UB-Mannheim/tesseract/wiki 
