@@ -108,7 +108,6 @@ def fillLoginpage(usn, subject_codes, result_link):
 
 def main():
 
-    os.chdir('D:\web_scrap')
     f = open("\result\marks.csv", "w")
     f.truncate()
     f.close()
